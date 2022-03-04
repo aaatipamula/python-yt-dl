@@ -53,5 +53,3 @@ class Downloader():
         method_name = f"download_{key.get(selection, '.')}"
         method = getattr(self, method_name, ".")
         return method()
-
-
