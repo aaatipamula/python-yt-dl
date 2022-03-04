@@ -1,0 +1,18 @@
+{
+    "ffmpeg_win":"https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip",
+    "ffmpeg_mac":"https://evermeet.cx/ffmpeg/ffmpeg-5.0.zip",
+    "distros":[
+        "apk-tools",
+        "dpkg",
+        "brew",
+        "ipkg",
+        "rpm",
+        "yum",
+        "apt",
+        "apt-get",
+        "spaackpkg",
+        "dnf",
+        "pacman",
+        "opkg"
+    ]
+}
