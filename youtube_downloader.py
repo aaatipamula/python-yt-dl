@@ -1,15 +1,15 @@
+from ast import Mod
 import os
 import json
 from setup import Setup
-from downloader import Downloader
-
 
 '''
 ***CHANGES TO MAKE TO THIS FILE***
 '''
-os.chdir(__file__.strip("youtube_downloader.py"))
 
-data = json.load(open('settings.json'))
+#os.chdir(__file__.strip("youtube_downloader.py"))
+os.chdir("/home/aaatipamula/vscode_projects/youtube-downloader/")
+settings = json.load(open('settings.json'))
 
 def __init__():
     while True:
@@ -36,11 +36,20 @@ def __init__():
         else: 
             print("Please enter a valid option")
 
-    Downloader(url, data.get("music_dir"), data.get("video_dir")).switcher(sel)
+    Downloader(url, settings.get("music_dir"), settings.get("video_dir")).switcher(sel)
     
 
 if __name__ == "__main__":
-    if os.path.isdir(Setup().program_dir):
-        __init__()
-    else:
-        Setup(start = True)
+    try:
+        from downloader import Downloader 
+
+        if os.path.isdir(Setup().program_dir):
+            __init__()
+        else:
+            Setup(start=True)
+
+    except KeyboardInterrupt:
+        print("\nExited.")
+        
+    except ModuleNotFoundError:
+        Setup(start=True)
