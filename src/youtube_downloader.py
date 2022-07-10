@@ -1,4 +1,3 @@
-from ast import Mod
 import os
 import json
 from setup import Setup
@@ -11,7 +10,7 @@ from setup import Setup
 os.chdir("/home/aaatipamula/vscode_projects/youtube-downloader/")
 settings = json.load(open('settings.json'))
 
-def __init__():
+def main():
     while True:
         x = input("YOU ARE STARTING THIS PROGRAM ARE YOU SURE YOU WANT TO START [y/n]: ")
         if x.lower() in ['y', 'yes']:
@@ -44,7 +43,7 @@ if __name__ == "__main__":
         from downloader import Downloader 
 
         if os.path.isdir(Setup().program_dir):
-            __init__()
+            main()
         else:
             Setup(start=True)
 
@@ -53,3 +52,5 @@ if __name__ == "__main__":
         
     except ModuleNotFoundError:
         Setup(start=True)
+
+else: print('Please run this as main file!')
