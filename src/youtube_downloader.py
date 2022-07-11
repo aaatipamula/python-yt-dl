@@ -1,6 +1,7 @@
 import os
 import json
 from setup import Setup
+from downloader import Downloader 
 
 def main():
     while True:
@@ -29,14 +30,11 @@ def main():
 
     Downloader(url, settings.get("music_dir"), settings.get("video_dir")).switcher(sel)
     
-
 if __name__ == "__main__":
     try:
         settings = json.load(open('./src/settings.json'))
-        
-        from downloader import Downloader 
 
-        if 'settings.json' in os.listdir('./src'):
+        if 'settings.json' not in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
             main()
         else:
             Setup(start=True)
@@ -44,13 +42,7 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\nExited.")
         
-    except ModuleNotFoundError:
-        Setup(start=True)
-
     except FileNotFoundError:
-        if 'settings.json' not in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
-            Setup(start=True)
-        else:
-            print('Exception: Please navigate to the root directory of this project to run it!')
+        print('Exception: Please navigate to the root directory of this project to run it!')
 
 else: print('Please run this as main file!')
