@@ -2,24 +2,16 @@ import os
 import json
 from setup import Setup
 
-'''
-***CHANGES TO MAKE TO THIS FILE***
-'''
-
-#os.chdir(__file__.strip("youtube_downloader.py"))
-os.chdir("/home/aaatipamula/vscode_projects/youtube-downloader/")
-settings = json.load(open('settings.json'))
-
 def main():
     while True:
-        x = input("YOU ARE STARTING THIS PROGRAM ARE YOU SURE YOU WANT TO START [y/n]: ")
+        x = input("Start YouTube Downloader? [y/n]: ")
         if x.lower() in ['y', 'yes']:
             break
         elif x.lower() in ['n', 'no']:
             print("\nSTOPPING PROGRAM...")
             exit()
         else:
-            print("Please enter a valid option.")
+            print("\nPlease enter a valid option.")
 
     while True:
         url = input("\nPlease input the url of the playlist/video you would like to download\n>> ")
@@ -40,9 +32,11 @@ def main():
 
 if __name__ == "__main__":
     try:
+        settings = json.load(open('./src/settings.json'))
+        
         from downloader import Downloader 
 
-        if os.path.isdir(Setup().program_dir):
+        if 'settings.json' in os.listdir('./src'):
             main()
         else:
             Setup(start=True)
@@ -52,5 +46,11 @@ if __name__ == "__main__":
         
     except ModuleNotFoundError:
         Setup(start=True)
+
+    except FileNotFoundError:
+        if 'settings.json' not in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
+            Setup(start=True)
+        else:
+            print('Exception: Please navigate to the root directory of this project to run it!')
 
 else: print('Please run this as main file!')
