@@ -2,6 +2,8 @@ import os
 import json
 from setup import Setup
 from downloader import Downloader 
+from yt_dlp.utils import PostProcessingError
+from yt_dlp.utils import DownloadError
 
 def main():
     while True:
@@ -34,7 +36,7 @@ if __name__ == "__main__":
     try:
         settings = json.load(open('./src/settings.json'))
 
-        if 'settings.json' not in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
+        if 'settings.json' in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
             main()
         else:
             Setup(start=True)
@@ -43,6 +45,12 @@ if __name__ == "__main__":
         print("\nExited.")
         
     except FileNotFoundError:
-        print('Exception: Please navigate to the root directory of this project to run it!')
+        print('\nException: Please navigate to the root directory of this project to run it!')
+
+    except DownloadError:
+        print('\nPlease make sure you have FFmpeg installed and available from the command line!')
+
+    except PostProcessingError:
+        print('\nPlease make sure you have FFmpeg installed and available from the command line!')
 
 else: print('Please run this as main file!')
