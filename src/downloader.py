@@ -1,5 +1,6 @@
 import yt_dlp
 import os
+import threading
 
 class Downloader():
     def __init__(self, url, music_dir, video_dir):
@@ -41,9 +42,12 @@ class Downloader():
             ydl.download([self.url])
 
     def download_both(self):
-        self.music_download()
-        self.video_download()
+        t1 = threading.Thread(target=self.download_audio())
+        t2 = threading.Thread(target=self.download_video())
 
+        t1.start()
+        t2.start()
+        
     def switcher(self, selection):
         key = {
         "1":"audio",
