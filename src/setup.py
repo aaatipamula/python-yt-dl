@@ -1,8 +1,6 @@
-import os
 import json
 import subprocess as sp
 import platform
-from tokenize import tabsize
 
 class Setup:
     def __init__(self, start = False):
@@ -82,7 +80,7 @@ class Setup:
         }
 
         with open("./src/settings.json", "w") as f:
-            f.write(json.dumps(data, tabsize=4))
+            f.write(json.dumps(data, indent=4))
         
         print("Setup complete!")
         
