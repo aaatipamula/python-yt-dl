@@ -20,8 +20,8 @@ This includes:
 
 ## Running This Project
 
-1. **FFmpeg**: This project requires that you install a third-party application called [FFmpeg](https://ffmpeg.org/). If you already have this application installed you can skip this step. If you need to install FFmpeg please refer to [this]() guide.
+1. **Install FFmpeg**: This project requires that you install a third-party application called [FFmpeg](https://ffmpeg.org/). If you already have this application installed you can skip this step. If you need to install FFmpeg please refer to [this](https://github.com/aaatipamula/ffmpeg-install) guide.
 
-2. Navigate to the root folder of the project and run `python3 ./src/youtube_downloader.py` This will put you into setup mode and you will enter a folder you would like to store audio and video in. 
+2. Navigate to the root folder of the project (The folder which you downloaded this project) and run `python3 ./src/youtube_downloader.py` This will put you into setup mode and you will enter a folder you would like to store audio and video in. *Put in the entire path of the folder you would like to save your music/videos in.*
 
 3. Run the previous command again and you should be put into the main program. Follow the directions to download and enjoy your content!
