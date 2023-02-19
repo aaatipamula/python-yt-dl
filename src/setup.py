@@ -1,25 +1,15 @@
 import json
-import subprocess as sp
 import platform
 
 class Setup:
-    def __init__(self, start = False):
-        
+    def __init__(self):
+
         if platform.system() == 'Windows':
             self.check = "C:\\"
         else:
             self.check = "/"
 
-        if start == True:
-            try:
-                self.startup()
-                self.install_ytdlp()
-                self.json_dump()
-            except KeyboardInterrupt:
-                print("Exited.")
-                exit()
-
-    def startup(self):
+    def run(self):
 
         print("This program is entering inital setup. If you have already gone through this process, make sure you have not deleted your settings.json file in the ./src folder.\
             \n**WARNING RUNNING ANY OPEN SOURCE PROGRAM IS DANGEROUS AND YOU SHOULD BE SURE ABOUT WHAT THE PROGRAM IS DOING!**\
@@ -36,6 +26,7 @@ class Setup:
                     exit()
                 else:
                     print("\nPlease enter a valid argument.")
+
             except KeyboardInterrupt:
                     print("\nPlease enter a valid argument")
 
@@ -59,18 +50,10 @@ class Setup:
             else:
                 break
 
-    def install_ytdlp(self):
-        try: 
-            sp.run(["python3", "-m", "pip", "install", "yt-dlp"], check=True)
+        self.json_dump()
 
-        except sp.CalledProcessError:
-            input("Something went wrong installing yt-dlp. \nTry running your command for invoking python followed by '-m pip install yt-dlp' in your command line. [Enter to continue] ")
-        
-        except FileNotFoundError:
-            try:
-                sp.run(["py", "-m", "pip", "install", "yt-dlp"], check=True)
-            except Exception:
-                input("Something went wrong installing yt-dlp. \nTry running your command for invoking python followed by '-m pip install yt-dlp' in your command line. [Enter to continue] ")
+        print("Setup complete!")
+        print("Please run 'pip install -r requirements.txt' before running.")
 
     def json_dump(self):
 
@@ -81,8 +64,4 @@ class Setup:
 
         with open("./src/settings.json", "w") as f:
             f.write(json.dumps(data, indent=4))
-        
-        print("Setup complete!")
-        
-if __name__ == "__main__":
-    print("Please do not run as main file!")
+

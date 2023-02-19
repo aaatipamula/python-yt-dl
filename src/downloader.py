@@ -1,59 +1,65 @@
-import yt_dlp
+from yt_dlp import YoutubeDL
+from yt_dlp.utils import DownloadError, PostProcessingError
 import os
 import threading
 
 class Downloader():
-    def __init__(self, url, music_dir, video_dir):
+    def __init__(self, url: str, dirs: dict, selection: str="1"):
         self.url = url
-        self.music_dir = music_dir
-        self.video_dir = video_dir
+        self.dirs = dirs
+        self.selection = selection
 
-    def download_audio(self):
-        os.chdir(self.music_dir)
-        print(f"\nChanging directory to {os.getcwd()}...")
+    def run(self):
 
-        ydl_opts = {
+        selection_key: dict[str, tuple] = {
+        "1": ("music",
+            {
             'format': 'bestaudio/best',
             'outtmpl': '%(title)s.%(ext)s',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '320',
-            }],
-        }
+                }],
+            }),
 
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([self.url]) 
-
-
-    def download_video(self):
-        os.chdir(self.video_dir)
-        print(f"\nChanging directory to {os.getcwd()}...")
-
-        ydl_opts = {
+        "2": ("video",
+            {
             'outtmpl':'%(title)s.%(ext)s',
             'postprocessors': [{
                 'key':'FFmpegVideoConvertor',
                 'preferedformat':'mp4',
-            }],
+                }],
+            })
         }
 
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([self.url])
+        if self.selection == "3":
 
-    def download_both(self):
-        t1 = threading.Thread(target=self.download_audio())
-        t2 = threading.Thread(target=self.download_video())
+            opts1: tuple = selection_key.get("1")
+            opts2: tuple = selection_key.get("2")
 
-        t1.start()
-        t2.start()
-        
-    def switcher(self, selection):
-        key = {
-        "1":"audio",
-        "2":"video",
-        "3":"both",
-        }
-        method_name = f"download_{key.get(selection, '.')}"
-        method = getattr(self, method_name, ".")
-        return method()
+            t1 = threading.Thread(target=YoutubeDL(opts1[1]).download, args=([self.url]))
+            t2 = threading.Thread(target=YoutubeDL(opts2[1]).download, args=([self.url]))
+
+            os.chdir(self.dirs.get(opts1[0] + "_dir"))
+            t1.start()
+
+            os.chdir(self.dirs.get(opts2[0] + "_dir"))
+            t2.start()
+
+        else:
+
+            opts: tuple = selection_key.get(self.selection)
+
+            os.chdir(self.dirs.get(opts[0] + "_dir"))
+
+            try: 
+                with YoutubeDL(opts[1]) as ydl:
+                    ydl.download([self.url])
+
+            except DownloadError:
+                print("Something went wrong downloading a video.")
+
+            except PostProcessingError:
+                print("Something went wrong using ffmpeg.\nPlease make sure you have ffmpeg installed and available from the command-line.")
+

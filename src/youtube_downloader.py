@@ -1,56 +1,47 @@
 import os
 import json
-from setup import Setup
+import setup
 from downloader import Downloader 
-from yt_dlp.utils import PostProcessingError
-from yt_dlp.utils import DownloadError
 
 def main():
-    while True:
-        x = input("Start YouTube Downloader? [y/n]: ")
-        if x.lower() in ['y', 'yes']:
-            break
-        elif x.lower() in ['n', 'no']:
-            print("\nSTOPPING PROGRAM...")
-            exit()
-        else:
-            print("\nPlease enter a valid option.")
 
     while True:
         url = input("\nPlease input the url of the playlist/video you would like to download\n>> ")
+
         if url.startswith("https://www.youtube.com/"):
             break 
         else:
             print("Please enter a youtube url.")  
-    
+
     while True:
-        sel = input("\nPlease enter what format you would like to download in...\nInput 1 for audio only, 2 for video, 3 for both.\n>> ")
+        sel = input("\nPlease enter what format you would like to download in:\n1) Audio\n2) Video\n3) Both\n>> ")
+
         if sel in ['1', '2', '3']: 
             break
         else: 
             print("Please enter a valid option")
 
-    Downloader(url, settings.get("music_dir"), settings.get("video_dir")).switcher(sel)
-    
-if __name__ == "__main__":
-    try:
-        settings = json.load(open('./src/settings.json'))
+    Downloader(url, settings, sel).run()
 
-        if 'settings.json' in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src'):
-            main()
+if __name__ == "__main__":
+
+    try: 
+
+        if not('settings.json' in os.listdir('./src') and 'youtube_downloader.py' in os.listdir('./src')):
+            setup.Setup().run()
+
         else:
-            Setup(start=True)
+            settings = json.load(open("./src/settings.json"))
+
+            main()
+
+    except ModuleNotFoundError:
+        print("Please install required dependencies by running:\n\n'pip install -r requirements.txt'")
+        print('\nPlease make sure you have FFmpeg installed and available from the command line!')
+
+    except FileNotFoundError:
+        print("Please navigate to the root directory of this project.")
 
     except KeyboardInterrupt:
         print("\nExited.")
-        
-    except FileNotFoundError:
-        print('\nException: Please navigate to the root directory of this project to run it!')
 
-    except DownloadError:
-        print('\nPlease make sure you have FFmpeg installed and available from the command line!')
-
-    except PostProcessingError:
-        print('\nPlease make sure you have FFmpeg installed and available from the command line!')
-
-else: print('Please run this as main file!')
